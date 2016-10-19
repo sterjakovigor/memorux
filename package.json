@@ -1,6 +1,6 @@
 {
   "name": "memorux",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "simple state container for react components",
   "main": "dist/index.js",
   "scripts": {
