@@ -1,6 +1,2 @@
-import Dispatcher from './lib/Dispatcher'
-import Store      from './lib/Store'
-
-module.exports = {
-  Dispatcher, Store
-}
+import Memorux from './lib/Memorux'
+export default Memorux
