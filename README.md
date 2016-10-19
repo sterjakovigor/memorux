@@ -62,7 +62,38 @@ memorux.onChange = (store) => {
 }
 ```
 
-## Step 5. Don't foorget to use spread opertor and properties transform
+## Delayed actions 
+just return a function with resolve reject arguments
+
+```javascript
+class PostStore {
+
+  initialStore = []
+
+  dispatch(store, action) {
+    switch (action.name) {
+      case 'ADD_NEW_POST':
+        let date = action.date
+        let newPosts = [
+          ...store,
+          {
+            title: data.title,
+            description: data.description
+          }
+        ]
+        return (resolve, reject) => {
+          setTimeout(() => {
+            resolve(newPosts)
+          }, 1000)
+        }
+        break
+    }
+  }
+
+}
+````
+
+## Don't foorget to use spread opertor and properties transform
 https://babeljs.io/docs/plugins/transform-object-rest-spread/
 
 https://babeljs.io/docs/plugins/transform-class-properties/
