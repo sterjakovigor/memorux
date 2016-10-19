@@ -9,22 +9,22 @@ Simple state container for your react components
 class PostStore {
 
   initialStore = []
-  
+
   dispatch(store, action) {
     switch (action.name) {
       case 'ADD_NEW_POST':
         let date = action.date
         [
           ...store,
-          { 
-            title: data.title, 
-            description: data.description 
+          {
+            title: data.title,
+            description: data.description
           }
         ]
         break
     }
   }
-  
+
 }
 ````
 
@@ -60,10 +60,10 @@ let memorux = new Memorux({
   }
 ```
 
-## Step 5. Don't foorget to use spread opertor and properties transform in your babel config ;) 
+## Step 5. Don't foorget to use spread opertor and properties transform
 https://babeljs.io/docs/plugins/transform-object-rest-spread/
 
 https://babeljs.io/docs/plugins/transform-class-properties/
 
 ### P.S.
-:heart: Inspired by redux, flux. 
+:heart: Inspired by redux, flux.
