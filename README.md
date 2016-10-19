@@ -66,4 +66,4 @@ https://babeljs.io/docs/plugins/transform-object-rest-spread/
 https://babeljs.io/docs/plugins/transform-class-properties/
 
 ### P.S.
-Inspired by redux, flux.
+:heart: Inspired by redux, flux. 
