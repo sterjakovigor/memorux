@@ -45,21 +45,21 @@ let memorux = new Memorux({
 ## Step 3. Dispatch action
 
 ```javascript
-  memorux.dispatch({
-    name: 'ADD_NEW_POST',
-    data: {
-      title:       'Where is my catpower?',
-      description: 'For the first time, a met catwooman in ...',
-    }
-  })
+memorux.dispatch({
+  name: 'ADD_NEW_POST',
+  data: {
+    title:       'Where is my catpower?',
+    description: 'For the first time, a met catwooman in ...',
+  }
+})
 ```
 
 ## Step 4. Listen changes
 
 ```javascript
-  memorux.onChange = (store) => {
-    console.log(store)
-  }
+memorux.onChange = (store) => {
+  console.log(store)
+}
 ```
 
 ## Step 5. Don't foorget to use spread opertor and properties transform
