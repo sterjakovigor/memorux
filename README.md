@@ -15,7 +15,7 @@ class PostStore {
   dispatch(store, action) {
     switch (action.name) {
       case 'ADD_NEW_POST':
-        let date = action.date
+        let data = action.data
         [
           ...store,
           {
@@ -62,7 +62,7 @@ memorux.onChange = (store) => {
 }
 ```
 
-## Delayed actions 
+## Delayed actions
 just return a function with resolve reject arguments
 
 ```javascript
