@@ -1,4 +1,4 @@
-![alt tag](https://raw.githubusercontent.com/sterjakovigor/memorux/master/memorux.jpg)
+![alt tag](https://raw.githubusercontent.com/sterjakovigor/memorux/master/logo.jpg)
 
 # Memorux
 Simple state container for your react components
