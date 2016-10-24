@@ -45,14 +45,14 @@ var Memorux = function () {
     }
   }]);
 
-  function Memorux(newStoreClasses) {
+  function Memorux(newStore) {
     _classCallCheck(this, Memorux);
 
     this._onChange = false;
     this._store = {};
     this._storeClasses = {};
 
-    this.createInitialStore(newStoreClasses);
+    this.store = newStore;
   }
 
   _createClass(Memorux, [{
@@ -88,13 +88,15 @@ var Memorux = function () {
       }
     }
   }, {
-    key: "createInitialStore",
-    value: function createInitialStore(newStoreClasses) {
+    key: "assignStores",
+    value: function assignStores(newStoreClasses) {
       this.storeClasses = newStoreClasses;
       for (var name in this.storeClasses) {
         var storeInstance = new this.storeClasses[name]();
         var initialState = storeInstance.initialState;
-        this.store = _extends({}, this.store, _defineProperty({}, name, initialState));
+        if (initialState != undefined) {
+          this.store = _extends({}, this.store, _defineProperty({}, name, initialState));
+        }
       }
     }
   }]);
