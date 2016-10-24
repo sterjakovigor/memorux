@@ -40,8 +40,8 @@ export default class Memorux {
   }
 
 
-  constructor(newStoreClasses) {
-    this.createInitialStore(newStoreClasses)
+  constructor(newStore) {
+    this.store = newStore
   }
 
 
@@ -71,14 +71,16 @@ export default class Memorux {
   }
 
 
-  createInitialStore(newStoreClasses) {
+  assignStores(newStoreClasses) {
     this.storeClasses = newStoreClasses
     for ( let name in this.storeClasses ) {
       let storeInstance = new this.storeClasses[name]
       let initialState = storeInstance.initialState
-      this.store = {
-        ...this.store,
-        ...{ [name]: initialState }
+      if (initialState != undefined) {
+        this.store = {
+          ...this.store,
+          ...{ [name]: initialState }
+        }        
       }
     }
   }

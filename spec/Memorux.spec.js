@@ -2,7 +2,28 @@ import Memorux from '../src/lib/Memorux'
 
 describe("Memorux", () => {
 
-  it("should inser new quote after timeout", (done) => {
+  it("initial store should be overridden by initialState of defined store class", () => {
+
+    let initialStore = {
+      DuckStore: [{ id: 0, name: 'Helen' }]
+    }
+
+    class DuckStore {
+      initialState = [
+        {id: 0, name: 'Gloria'   },
+        {id: 1, name: 'Victoria' },
+        {id: 2, name: 'Sofia'    }
+      ]
+    }
+
+    let memorux = new Memorux(initialStore)
+    expect(memorux.store.DuckStore.length).toEqual(1)
+    memorux.assignStores({ DuckStore })
+    expect(memorux.store.DuckStore.length).toEqual(3)
+
+  })
+
+  it("should insert new quote after timeout", (done) => {
 
     class QuoteStore {
 
@@ -37,13 +58,13 @@ describe("Memorux", () => {
 
     }
 
-    let memorux = new Memorux({QuoteStore})
+    let memorux = new Memorux()
+    memorux.assignStores({ QuoteStore })
 
     expect(memorux.store.QuoteStore.length).toEqual(1)
 
     memorux.onChange = (store) => {
       expect(store.QuoteStore.length).toEqual(2)
-      console.log(store.QuoteStore)
       done()
     }
 
@@ -79,9 +100,8 @@ describe("Memorux", () => {
 
     }
 
-    let memorux = new Memorux({
-      SettingsStore
-    })
+    let memorux = new Memorux
+    memorux.assignStores({ SettingsStore })
 
     expect(memorux.store.SettingsStore.name).toBe(null)
 
@@ -121,9 +141,8 @@ describe("Memorux", () => {
 
     }
 
-    let memorux = new Memorux({
-      PostStore
-    })
+    let memorux = new Memorux
+    memorux.assignStores({ PostStore })
 
     expect(memorux.store.PostStore.length).toEqual(1)
 

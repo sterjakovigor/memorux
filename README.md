@@ -35,7 +35,8 @@ class PostStore {
 ```javascript
 import memorux from 'Memorux'
 
-let memorux = new Memorux({
+let memorux = new Memorux
+memorux.assignStores({
   PostsStore,
   UserStore,
   ExternalStore,
