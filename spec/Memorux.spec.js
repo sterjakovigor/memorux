@@ -2,6 +2,35 @@ import Memorux from '../src/lib/Memorux'
 
 describe("Memorux", () => {
 
+  it("prevent merge state when store dispatch method return undefined", () => {
+    class DuckStore {
+      initialState = [
+        { name: 'Marry' },
+      ]
+
+      dispatch(store, action) {
+      }
+    }
+
+    let memorux = new Memorux()
+    memorux.assignStores({ DuckStore })
+    memorux.dispatch({ name: 'SOME_ACTION' })
+    expect(memorux.store.DuckStore.length).toEqual(1)
+  })
+
+  it("prevent merge state when store doesn's have dispatch method", () => {
+      class DuckStore {
+        initialState = [
+          { name: 'Marry' },
+        ]
+      }
+
+      let memorux = new Memorux()
+      memorux.assignStores({ DuckStore })
+      memorux.dispatch({ name: 'SOME_ACTION' })
+      expect(memorux.store.DuckStore.length).toEqual(1)
+  })
+
   it("initial store should be overridden by initialState of defined store class", () => {
 
     let initialStore = {
@@ -88,7 +117,7 @@ describe("Memorux", () => {
 
       dispatch(state, action) {
         switch (action.name) {
-          case 'UPDATE_SETTINGS_NAME':
+          case 'UPDATE_SETTING_NAME':
             return {
               name: action.data.name
             }
@@ -110,7 +139,7 @@ describe("Memorux", () => {
     }
 
     memorux.dispatch({
-      name: 'UPDATE_SETTINGS_NAME',
+      name: 'UPDATE_SETTING_NAME',
       data: {
         name: 'Igor Sterjakov'
       }

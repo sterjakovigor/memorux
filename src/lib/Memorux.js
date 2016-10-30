@@ -53,6 +53,7 @@ export default class Memorux {
   dispatch(action) {
     for ( let name in this.storeClasses ) {
       let storeInstance = new this.storeClasses[name]
+      if (typeof storeInstance.dispatch != "function") continue
       let dispatchedStore = storeInstance.dispatch(this.store[name], action)
       if (typeof dispatchedStore == "function") {
         new Promise(dispatchedStore).then((newStore) => {
@@ -61,11 +62,9 @@ export default class Memorux {
             this.touchStore()
           }
         })
-      } else {
-        if(this.store[name] != dispatchedStore) {
-          this.store[name] = dispatchedStore
-          this.touchStore()
-        }
+      } else if (this.store[name] != dispatchedStore && dispatchedStore != undefined) {
+        this.store[name] = dispatchedStore
+        this.touchStore()
       }
     }
   }
@@ -80,7 +79,7 @@ export default class Memorux {
         this.store = {
           ...this.store,
           ...{ [name]: initialState }
-        }        
+        }
       }
     }
   }

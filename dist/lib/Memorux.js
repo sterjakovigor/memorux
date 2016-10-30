@@ -67,6 +67,7 @@ var Memorux = function () {
 
       var _loop = function _loop(name) {
         var storeInstance = new _this.storeClasses[name]();
+        if (typeof storeInstance.dispatch != "function") return "continue";
         var dispatchedStore = storeInstance.dispatch(_this.store[name], action);
         if (typeof dispatchedStore == "function") {
           new Promise(dispatchedStore).then(function (newStore) {
@@ -75,16 +76,16 @@ var Memorux = function () {
               _this.touchStore();
             }
           });
-        } else {
-          if (_this.store[name] != dispatchedStore) {
-            _this.store[name] = dispatchedStore;
-            _this.touchStore();
-          }
+        } else if (_this.store[name] != dispatchedStore && dispatchedStore != undefined) {
+          _this.store[name] = dispatchedStore;
+          _this.touchStore();
         }
       };
 
       for (var name in this.storeClasses) {
-        _loop(name);
+        var _ret = _loop(name);
+
+        if (_ret === "continue") continue;
       }
     }
   }, {
