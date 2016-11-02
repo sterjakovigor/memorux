@@ -48,6 +48,8 @@ var Memorux = function () {
   function Memorux(newStore) {
     _classCallCheck(this, Memorux);
 
+    this._waitingActions = [];
+    this._action_id = 0;
     this._onChange = false;
     this._store = {};
     this._storeClasses = {};
@@ -63,30 +65,78 @@ var Memorux = function () {
   }, {
     key: "dispatch",
     value: function dispatch(action) {
+      action.id = this._action_id++;
+      if (action.wait != undefined && action.wait.length > 0) {
+        this._waitingActions.push(action);
+      } else {
+        this.dispatchAction(action);
+      }
+      return action;
+    }
+  }, {
+    key: "dispatchAction",
+    value: function dispatchAction(action) {
       var _this = this;
 
-      var _loop = function _loop(name) {
-        var storeInstance = new _this.storeClasses[name]();
-        if (typeof storeInstance.dispatch != "function") return "continue";
-        var dispatchedStore = storeInstance.dispatch(_this.store[name], action);
+      var promisedDispatchers = [];
+
+      for (var storeName in this.storeClasses) {
+        var storeInstance = new this.storeClasses[storeName]();
+        if (typeof storeInstance.dispatch != "function") continue;
+        var dispatchedStore = storeInstance.dispatch(this.store[storeName], action);
         if (typeof dispatchedStore == "function") {
-          new Promise(dispatchedStore).then(function (newStore) {
-            if (_this.store[name] != newStore) {
-              _this.store[name] = newStore;
-              _this.touchStore();
-            }
-          });
-        } else if (_this.store[name] != dispatchedStore && dispatchedStore != undefined) {
-          _this.store[name] = dispatchedStore;
-          _this.touchStore();
+          promisedDispatchers.push({ callback: dispatchedStore, storeName: storeName });
+        } else {
+          this.updateStore({ storeName: storeName, newState: dispatchedStore });
         }
-      };
-
-      for (var name in this.storeClasses) {
-        var _ret = _loop(name);
-
-        if (_ret === "continue") continue;
       }
+
+      promisedDispatchers.forEach(function (dispatcher, index) {
+        new Promise(dispatcher.callback).then(function (newState) {
+          _this.updateStore({ storeName: dispatcher.storeName, newState: newState });
+
+          var readyActions = _this.getReadyWaitingActions(action);
+          readyActions.forEach(function (readyAction, index) {
+            _this.dispatchAction(readyAction);
+          });
+        });
+      });
+    }
+  }, {
+    key: "updateStore",
+    value: function updateStore(_ref) {
+      var storeName = _ref.storeName;
+      var newState = _ref.newState;
+
+      if (newState != undefined && this.store[storeName] != newState) {
+        this.store[storeName] = newState;
+        this.touchStore();
+      }
+    }
+  }, {
+    key: "getReadyWaitingActions",
+    value: function getReadyWaitingActions(action) {
+      var _this2 = this;
+
+      var readyActions = [];
+
+      this._waitingActions = this._waitingActions.filter(function (_waitingAction, index) {
+        _this2._waitingActions[index].wait = _waitingAction.wait.filter(function (waitFor, index) {
+          if (waitFor.id == action.id) {
+            return false;
+          } else {
+            return true;
+          }
+        });
+        if (_this2._waitingActions[index].wait.length == 0) {
+          readyActions.push(_this2._waitingActions[index]);
+          return false;
+        } else {
+          return true;
+        }
+      });
+
+      return readyActions;
     }
   }, {
     key: "assignStores",
