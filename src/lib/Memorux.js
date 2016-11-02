@@ -92,15 +92,10 @@ export default class Memorux {
 
       })
     })
-  }
 
 
-  updateStore({ storeName, newState }) {
-    if (newState != undefined && this.store[storeName] != newState) {
-      this.store[storeName] = newState
-      this.touchStore()
-    }
   }
+
 
   getReadyWaitingActions(action) {
     let readyActions = []
@@ -118,6 +113,14 @@ export default class Memorux {
     })
 
     return readyActions
+  }
+
+
+  updateStore({ storeName, newState }) {
+    if (newState != undefined && this.store[storeName] != newState) {
+      this.store = { ...this.store, ...{ [storeName]: newState } }
+      this.touchStore()
+    }
   }
 
 

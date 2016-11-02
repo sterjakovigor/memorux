@@ -2,7 +2,7 @@ import Memorux from '../src/lib/Memorux'
 
 describe("Ordered actions", () => {
 
-  it("must be update single store in order", (done) => {
+  xit("must be update single store in order", (done) => {
     class PostStore {
       initialState = {}
 
@@ -13,14 +13,14 @@ describe("Ordered actions", () => {
             return (resolve, reject) => {
               setTimeout(() => {
                 resolve({ say: 'Post added!' })
-              }, 3000)
+              }, 30)
             }
             break
           case 'POST_CONGRATULATIONS':
             return (resolve, reject) => {
               setTimeout(() => {
                 resolve({ say: 'Congratulations!' })
-              }, 1000)
+              }, 10)
             }
             break
         }

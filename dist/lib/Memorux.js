@@ -103,17 +103,6 @@ var Memorux = function () {
       });
     }
   }, {
-    key: "updateStore",
-    value: function updateStore(_ref) {
-      var storeName = _ref.storeName;
-      var newState = _ref.newState;
-
-      if (newState != undefined && this.store[storeName] != newState) {
-        this.store[storeName] = newState;
-        this.touchStore();
-      }
-    }
-  }, {
     key: "getReadyWaitingActions",
     value: function getReadyWaitingActions(action) {
       var _this2 = this;
@@ -137,6 +126,17 @@ var Memorux = function () {
       });
 
       return readyActions;
+    }
+  }, {
+    key: "updateStore",
+    value: function updateStore(_ref) {
+      var storeName = _ref.storeName;
+      var newState = _ref.newState;
+
+      if (newState != undefined && this.store[storeName] != newState) {
+        this.store = _extends({}, this.store, _defineProperty({}, storeName, newState));
+        this.touchStore();
+      }
     }
   }, {
     key: "assignStores",
