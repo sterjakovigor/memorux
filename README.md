@@ -94,6 +94,57 @@ class PostStore {
 }
 ````
 
+### Waiting for delayed actions
+```javascript
+import memorux from 'Memorux'
+
+class PostStore {
+  initialState = {}
+
+  dispatch(state, action) {
+
+    switch(action.name) {
+      case 'POST_ADD':
+        return (resolve, reject) => {
+          setTimeout(() => {
+            resolve({ say: 'Post added!' })
+          }, 3000)
+        }
+        break
+      case 'POST_CONGRATULATIONS':
+        return (resolve, reject) => {
+          setTimeout(() => {
+            resolve({ say: 'Congratulations!' })
+          }, 1000)
+        }
+        break
+    }
+
+  }
+
+}
+
+let memorux = new Memorux()
+
+memorux.assignStores({ PostStore })
+
+memorux.onChange = (store) => {
+  console.log(store.PostStore.say)
+}
+
+let postAddAction =
+  memorux.dispatch({ name: 'POST_ADD' })
+memorux.dispatch({ name: 'POST_CONGRATULATIONS', wait: [ postAddAction ] })
+
+// result:
+// Post added!
+// Congratulations!
+
+```
+
+
+
+
 ## Don't foorget to use spread opertor and properties transform
 https://babeljs.io/docs/plugins/transform-object-rest-spread/
 

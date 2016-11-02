@@ -2,14 +2,61 @@ import Memorux from '../src/lib/Memorux'
 
 describe("Ordered actions", () => {
 
-  it("must be update stores in order", (done) => {
+  it("must be update single store in order", (done) => {
+    class PostStore {
+      initialState = {}
+
+      dispatch(state, action) {
+
+        switch(action.name) {
+          case 'POST_ADD':
+            return (resolve, reject) => {
+              setTimeout(() => {
+                resolve({ say: 'Post added!' })
+              }, 3000)
+            }
+            break
+          case 'POST_CONGRATULATIONS':
+            return (resolve, reject) => {
+              setTimeout(() => {
+                resolve({ say: 'Congratulations!' })
+              }, 1000)
+            }
+            break
+        }
+
+      }
+
+    }
+
+    let memorux = new Memorux()
+    memorux.assignStores({ PostStore })
+    let counter = 0
+    memorux.onChange = (store) => {
+      ++counter
+      switch(counter) {
+        case 1:
+          expect(store.PostStore.say).toEqual('Post added!')
+          break
+        case 2:
+          expect(store.PostStore.say).toEqual('Congratulations!')
+          done()
+          break
+      }
+    }
+    let postAddAction = memorux.dispatch({ name: 'POST_ADD' })
+    memorux.dispatch({ name: 'POST_CONGRATULATIONS', wait: [ postAddAction ] })
+
+  })
+
+  it("must be update multiple stores in order", (done) => {
 
     let initialState = {
       awoke: false,
     }
 
     let dispatch = ({ timeout, name }) => {
-      return (store, action) => {
+      return (state, action) => {
         switch(action.name) {
           case name.toUpperCase() + '_GOOD_MORNING':
             return (resolve, reject) => {
@@ -65,8 +112,11 @@ describe("Ordered actions", () => {
       if (++counter == 3) done()
     }
 
-    let saraAction = memorux.dispatch({ name: 'SARA_GOOD_MORNING' })
-    let jessicaAction = memorux.dispatch({  name: 'JESSICA_GOOD_MORNING', wait: [ saraAction ] })
+    let saraAction =
+      memorux.dispatch({ name: 'SARA_GOOD_MORNING' })
+    let jessicaAction =
+      memorux.dispatch({ name: 'JESSICA_GOOD_MORNING', wait: [ saraAction ] })
+
     memorux.dispatch({ name: 'BARBARA_GOOD_MORNING',  wait: [ saraAction, jessicaAction ] })
 
   })
