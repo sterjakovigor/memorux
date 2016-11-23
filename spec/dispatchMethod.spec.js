@@ -27,7 +27,7 @@ describe("Dispatch method", () => {
     let memorux = new Memorux
     memorux.assignStores({ SettingsStore })
 
-    expect(memorux.store.SettingsStore.name).toBe(null)
+    expect(memorux.stores.SettingsStore.name).toBe(null)
 
     memorux.onChange = (store) => {
       expect(store.SettingsStore.name).not.toBe(null)
@@ -68,7 +68,7 @@ describe("Dispatch method", () => {
     let memorux = new Memorux
     memorux.assignStores({ PostStore })
 
-    expect(memorux.store.PostStore.length).toEqual(1)
+    expect(memorux.stores.PostStore.length).toEqual(1)
 
     memorux.onChange = (store) => {
       expect(store.PostStore.length).toEqual(2)

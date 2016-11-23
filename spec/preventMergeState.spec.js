@@ -15,7 +15,7 @@ describe("Prevent merge state when store", () => {
     let memorux = new Memorux()
     memorux.assignStores({ DuckStore })
     memorux.dispatch({ name: 'SOME_ACTION' })
-    expect(memorux.store.DuckStore.length).toEqual(1)
+    expect(memorux.stores.DuckStore.length).toEqual(1)
   })
 
   it("store doesn's have dispatch method", () => {
@@ -28,7 +28,7 @@ describe("Prevent merge state when store", () => {
       let memorux = new Memorux()
       memorux.assignStores({ DuckStore })
       memorux.dispatch({ name: 'SOME_ACTION' })
-      expect(memorux.store.DuckStore.length).toEqual(1)
+      expect(memorux.stores.DuckStore.length).toEqual(1)
   })
 
 })

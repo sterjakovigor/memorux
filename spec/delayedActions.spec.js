@@ -40,7 +40,7 @@ describe("Delayed actions", () => {
     let memorux = new Memorux()
     memorux.assignStores({ QuoteStore })
 
-    expect(memorux.store.QuoteStore.length).toEqual(1)
+    expect(memorux.stores.QuoteStore.length).toEqual(1)
 
     memorux.onChange = (store) => {
       expect(store.QuoteStore.length).toEqual(2)

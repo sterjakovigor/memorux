@@ -47,12 +47,12 @@ export default class Memorux {
 
 
   constructor(newStore) {
-    this.store = newStore
+    this.stores = newStore
   }
 
 
   touchStore() {
-    if(this._onChange) this.onChange(this.store)
+    if(this._onChange) this.onChange(this.stores)
   }
 
 
@@ -73,7 +73,7 @@ export default class Memorux {
     for ( let storeName in this.storeClasses ) {
       let storeInstance = new this.storeClasses[storeName]
       if (typeof storeInstance.dispatch != "function") continue
-      let dispatchedStore = storeInstance.dispatch(this.store[storeName], action)
+      let dispatchedStore = storeInstance.dispatch(this.stores[storeName], action)
       if (typeof dispatchedStore == "function") {
         promisedDispatchers.push({ callback: dispatchedStore, storeName })
       } else {
@@ -117,8 +117,8 @@ export default class Memorux {
 
 
   updateStore({ storeName, newState }) {
-    if (newState != undefined && this.store[storeName] != newState) {
-      this.store = { ...this.store, ...{ [storeName]: newState } }
+    if (newState != undefined && this.stores[storeName] != newState) {
+      this.stores = { ...this.stores, ...{ [storeName]: newState } }
       this.touchStore()
     }
   }
@@ -130,8 +130,8 @@ export default class Memorux {
       let storeInstance = new this.storeClasses[name]
       let initialState = storeInstance.initialState
       if (initialState != undefined) {
-        this.store = {
-          ...this.store,
+        this.stores = {
+          ...this.stores,
           ...{ [name]: initialState }
         }
       }

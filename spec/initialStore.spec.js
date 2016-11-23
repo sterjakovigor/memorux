@@ -17,9 +17,9 @@ describe("Initial store", () => {
     }
 
     let memorux = new Memorux(initialStore)
-    expect(memorux.store.DuckStore.length).toEqual(1)
+    expect(memorux.stores.DuckStore.length).toEqual(1)
     memorux.assignStores({ DuckStore })
-    expect(memorux.store.DuckStore.length).toEqual(3)
+    expect(memorux.stores.DuckStore.length).toEqual(3)
 
   })
 

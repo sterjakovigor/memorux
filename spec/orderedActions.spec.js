@@ -2,7 +2,7 @@ import Memorux from '../src/lib/Memorux'
 
 describe("Ordered actions", () => {
 
-  xit("must be update single store in order", (done) => {
+  it("must be update single store in order", (done) => {
     class PostStore {
       initialState = {}
 
