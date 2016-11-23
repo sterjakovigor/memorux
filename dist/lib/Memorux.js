@@ -54,13 +54,13 @@ var Memorux = function () {
     this._store = {};
     this._storeClasses = {};
 
-    this.store = newStore;
+    this.stores = newStore;
   }
 
   _createClass(Memorux, [{
     key: "touchStore",
     value: function touchStore() {
-      if (this._onChange) this.onChange(this.store);
+      if (this._onChange) this.onChange(this.stores);
     }
   }, {
     key: "dispatch",
@@ -83,7 +83,7 @@ var Memorux = function () {
       for (var storeName in this.storeClasses) {
         var storeInstance = new this.storeClasses[storeName]();
         if (typeof storeInstance.dispatch != "function") continue;
-        var dispatchedStore = storeInstance.dispatch(this.store[storeName], action);
+        var dispatchedStore = storeInstance.dispatch(this.stores[storeName], action);
         if (typeof dispatchedStore == "function") {
           promisedDispatchers.push({ callback: dispatchedStore, storeName: storeName });
         } else {
@@ -133,8 +133,8 @@ var Memorux = function () {
       var storeName = _ref.storeName;
       var newState = _ref.newState;
 
-      if (newState != undefined && this.store[storeName] != newState) {
-        this.store = _extends({}, this.store, _defineProperty({}, storeName, newState));
+      if (newState != undefined && this.stores[storeName] != newState) {
+        this.stores = _extends({}, this.stores, _defineProperty({}, storeName, newState));
         this.touchStore();
       }
     }
@@ -146,7 +146,7 @@ var Memorux = function () {
         var storeInstance = new this.storeClasses[name]();
         var initialState = storeInstance.initialState;
         if (initialState != undefined) {
-          this.store = _extends({}, this.store, _defineProperty({}, name, initialState));
+          this.stores = _extends({}, this.stores, _defineProperty({}, name, initialState));
         }
       }
     }
