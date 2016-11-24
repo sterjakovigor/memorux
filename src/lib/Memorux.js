@@ -20,15 +20,15 @@ export default class Memorux {
   }
 
 
-  _store = {}
+  _stores = {}
 
   get store() {
-    return this._store
+    return this._stores
   }
 
   set store(newStore) {
     if (newStore) {
-      this._store = newStore
+      this._stores = newStore
     }
   }
 
