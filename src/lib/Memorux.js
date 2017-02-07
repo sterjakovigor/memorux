@@ -125,7 +125,6 @@ export default class Memorux {
 
   assignStores(storeInstances) {
     for (const storeName in storeInstances) {
-      console.log(storeInstances[storeName])
       this.storeInstances[storeName] = new storeInstances[storeName]
     }
     this.assignInitialState()
