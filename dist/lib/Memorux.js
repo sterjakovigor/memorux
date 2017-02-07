@@ -34,13 +34,13 @@ var Memorux = function () {
       }
     }
   }, {
-    key: "storeClasses",
+    key: "storeInstances",
     get: function get() {
-      return this._storeClasses;
+      return this._storeInstances;
     },
-    set: function set(newDispatchers) {
-      if (newDispatchers) {
-        this._storeClasses = newDispatchers;
+    set: function set(newStoreInstance) {
+      if (newStoreInstance) {
+        this._storeInstances = newStoreInstance;
       }
     }
   }]);
@@ -52,7 +52,7 @@ var Memorux = function () {
     this._action_id = 0;
     this._onChange = false;
     this._store = {};
-    this._storeClasses = {};
+    this._storeInstances = {};
 
     this.stores = newStore;
   }
@@ -80,8 +80,8 @@ var Memorux = function () {
 
       var promisedDispatchers = [];
 
-      for (var storeName in this.storeClasses) {
-        var storeInstance = new this.storeClasses[storeName]();
+      for (var storeName in this.storeInstances) {
+        var storeInstance = this.storeInstances[storeName];
         if (typeof storeInstance.dispatch != "function") continue;
         var dispatchedStore = storeInstance.dispatch(this.stores[storeName], action);
         if (typeof dispatchedStore == "function") {
@@ -140,14 +140,19 @@ var Memorux = function () {
     }
   }, {
     key: "assignStores",
-    value: function assignStores(newStoreClasses) {
-      this.storeClasses = newStoreClasses;
-      for (var name in this.storeClasses) {
-        var storeInstance = new this.storeClasses[name]();
-        var initialState = storeInstance.initialState;
-        if (initialState != undefined) {
-          this.stores = _extends({}, this.stores, _defineProperty({}, name, initialState));
-        }
+    value: function assignStores(storeInstances) {
+      for (var storeName in storeInstances) {
+        console.log(storeInstances[storeName]);
+        this.storeInstances[storeName] = new storeInstances[storeName]();
+      }
+      this.assignInitialState();
+    }
+  }, {
+    key: "assignInitialState",
+    value: function assignInitialState() {
+      for (var storeName in this.storeInstances) {
+        var storeInstance = this.storeInstances[storeName];
+        this.stores = _extends({}, this.stores, _defineProperty({}, storeName, storeInstance.initialState));
       }
     }
   }]);

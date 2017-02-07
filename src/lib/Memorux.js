@@ -20,28 +20,28 @@ export default class Memorux {
   }
 
 
-  _stores = {}
+  _store = {}
 
   get store() {
-    return this._stores
+    return this._store
   }
 
   set store(newStore) {
     if (newStore) {
-      this._stores = newStore
+      this._store = newStore
     }
   }
 
 
-  _storeClasses = {}
+  _storeInstances = {}
 
-  get storeClasses() {
-    return this._storeClasses
+  get storeInstances() {
+    return this._storeInstances
   }
 
-  set storeClasses(newDispatchers) {
-    if (newDispatchers) {
-      this._storeClasses = newDispatchers
+  set storeInstances(newStoreInstance) {
+    if (newStoreInstance) {
+      this._storeInstances = newStoreInstance
     }
   }
 
@@ -70,8 +70,8 @@ export default class Memorux {
 
     let promisedDispatchers = []
 
-    for ( let storeName in this.storeClasses ) {
-      let storeInstance = new this.storeClasses[storeName]
+    for ( let storeName in this.storeInstances ) {
+      const storeInstance = this.storeInstances[storeName]
       if (typeof storeInstance.dispatch != "function") continue
       let dispatchedStore = storeInstance.dispatch(this.stores[storeName], action)
       if (typeof dispatchedStore == "function") {
@@ -123,17 +123,20 @@ export default class Memorux {
     }
   }
 
+  assignStores(storeInstances) {
+    for (const storeName in storeInstances) {
+      console.log(storeInstances[storeName])
+      this.storeInstances[storeName] = new storeInstances[storeName]
+    }
+    this.assignInitialState()
+  }
 
-  assignStores(newStoreClasses) {
-    this.storeClasses = newStoreClasses
-    for ( let name in this.storeClasses ) {
-      let storeInstance = new this.storeClasses[name]
-      let initialState = storeInstance.initialState
-      if (initialState != undefined) {
-        this.stores = {
-          ...this.stores,
-          ...{ [name]: initialState }
-        }
+  assignInitialState() {
+    for (const storeName in this.storeInstances) {
+      const storeInstance = this.storeInstances[storeName]
+      this.stores = {
+        ...this.stores,
+        ...{ [storeName]: storeInstance.initialState }
       }
     }
   }
