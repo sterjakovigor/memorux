@@ -142,7 +142,6 @@ var Memorux = function () {
     key: "assignStores",
     value: function assignStores(storeInstances) {
       for (var storeName in storeInstances) {
-        console.log(storeInstances[storeName]);
         this.storeInstances[storeName] = new storeInstances[storeName]();
       }
       this.assignInitialState();
