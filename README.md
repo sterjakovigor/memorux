@@ -177,3 +177,18 @@ memorux.dispatch({ name: 'POST_CONGRATULATIONS', wait: [ postAddAction ] })
 // Post added!
 // Congratulations!
 ```
+
+## Get initial states by stores
+
+```javascript
+
+  class FirstStore { constructor() { this.state = 'first' } }
+
+  class SecondStore { constructor() { this.state = 'second' } }
+
+  const states = Memorux.getStates({ FirstStore, SecondStore })
+
+  // states =>
+  // { FirstStore: 'first', SecondStore: 'second' }
+
+```
