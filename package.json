@@ -1,6 +1,6 @@
 {
   "name": "memorux",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Simple state container for your vqua components",
   "main": "lib/index.js",
   "scripts": {
