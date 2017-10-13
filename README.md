@@ -1,7 +1,7 @@
 ![alt tag](https://raw.githubusercontent.com/sterjakovigor/memorux/master/logo.jpg)
 
 # Memorux
-Simple state container for your react components
+Simple state container for your [vqua](https://github.com/sterjakovigor/vqua) components
 
 # Example
 
@@ -10,32 +10,40 @@ Simple state container for your react components
 ```javascript
 class PostStore {
 
-  initialStore = []
+  constructor() {
+    this.state = []
+  }
 
   dispatch(store, action) {
+
     switch (action.name) {
+
       case 'ADD_NEW_POST':
-        let data = action.data
-        [
+
+        const data = action.data
+
+        return [
           ...store,
           {
             title: data.title,
             description: data.description
           }
         ]
+
         break
     }
   }
 
 }
-````
+```
 
-## Step 2. Connect your stores
+## Step 2. Assign your stores
 
 ```javascript
-import memorux from 'Memorux'
+const memorux = require('memorux')
 
-let memorux = new Memorux
+const memorux = new Memorux
+
 memorux.assignStores({
   PostsStore,
   UserStore,
@@ -72,21 +80,31 @@ class PostStore {
   initialStore = []
 
   dispatch(store, action) {
+
     switch (action.name) {
+
       case 'ADD_NEW_POST':
-        let date = action.date
-        let newPosts = [
+
+        const date = action.date
+
+        const newPosts = [
           ...store,
           {
             title: data.title,
             description: data.description
           }
         ]
+
         return (resolve, reject) => {
+
           setTimeout(() => {
+
             resolve(newPosts)
+
           }, 1000)
+
         }
+
         break
     }
   }
@@ -96,27 +114,46 @@ class PostStore {
 
 ### Waiting for delayed actions
 ```javascript
-import memorux from 'Memorux'
+const memorux = require('memorux')
 
 class PostStore {
-  initialState = {}
+
+  constructor() {
+
+    this.state = {}
+
+  }
 
   dispatch(state, action) {
 
     switch(action.name) {
+
       case 'POST_ADD':
+
         return (resolve, reject) => {
+
           setTimeout(() => {
+
             resolve({ say: 'Post added!' })
+
           }, 3000)
+
         }
+
         break
+
       case 'POST_CONGRATULATIONS':
+
         return (resolve, reject) => {
+
           setTimeout(() => {
+
             resolve({ say: 'Congratulations!' })
+
           }, 1000)
+
         }
+
         break
     }
 
@@ -124,7 +161,7 @@ class PostStore {
 
 }
 
-let memorux = new Memorux()
+const memorux = new Memorux()
 
 memorux.assignStores({ PostStore })
 
@@ -132,23 +169,11 @@ memorux.onChange = (store) => {
   console.log(store.PostStore.say)
 }
 
-let postAddAction =
-  memorux.dispatch({ name: 'POST_ADD' })
+const postAddAction = memorux.dispatch({ name: 'POST_ADD' })
+
 memorux.dispatch({ name: 'POST_CONGRATULATIONS', wait: [ postAddAction ] })
 
 // result:
 // Post added!
 // Congratulations!
-
 ```
-
-
-
-
-## Don't foorget to use spread opertor and properties transform
-https://babeljs.io/docs/plugins/transform-object-rest-spread/
-
-https://babeljs.io/docs/plugins/transform-class-properties/
-
-### P.S.
-:heart: Inspired by redux, flux.
