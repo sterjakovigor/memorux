@@ -130,3 +130,21 @@ class Cat {
 
 }
 ```
+
+Also, if you dispatch a few delayed actions
+you may need an event ending all of the actions, you can do so
+
+```javascript
+memorux.dispatch([
+
+  // delayed action
+  // delayed action
+  // delayed action
+
+]).then((store) => {
+
+  // do something with store
+  // after all actions ready
+
+})
+```
